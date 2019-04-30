@@ -1,6 +1,5 @@
 import Data.List 
 import System.IO
-import Control.Monad
 {-
 data TextEditor = TextEditor {
     highlights :: String,
@@ -74,7 +73,7 @@ data TextEditor2 = TextEditor2 {
     clipboard :: String
 } deriving Show
 
-init2 = TextEditor2 {highlights = "", leftOfCursor = "Hello ", rightOfCursor = "World", clipboard = ""}
+init2 = TextEditor2 {highlights = "", leftOfCursor = "Sup Hello ", rightOfCursor = "World test", clipboard = ""}
 {-
 b = moveCursorLeft init2
 c = moveCursorLeft b
@@ -126,6 +125,16 @@ highlightRightSideCursor :: TextEditor2 -> TextEditor2
 highlightRightSideCursor (textEditor@TextEditor2{rightOfCursor = roc}) = textEditor{highlights = roc}
 
 highlightLeftWord :: TextEditor2 -> TextEditor2
+highlightLeftWord (textEditor@TextEditor2{leftOfCursor = loc}) = textEditor{highlights = last(words loc)}
+
+highlightRightWord :: TextEditor2 -> TextEditor2
+highlightRightWord (textEditor@TextEditor2{rightOfCursor = roc}) = textEditor{highlights = head(words roc)}
+
+highlightLeftWords :: TextEditor2 -> Int -> TextEditor2
+highlighLeftWords textEditor2 0 = textEditor2
+highlightLeftWords textEditor numberOfRepeats = do
+    let a = highlightLeftWord textEditor
+    highlightLeftWords a (numberOfRepeats - 1)
 
 highlightClear :: TextEditor2 -> TextEditor2
 highlightClear clearing = clearing {highlights = ""}
